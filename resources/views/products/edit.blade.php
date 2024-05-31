@@ -41,8 +41,13 @@
                             <option value="not_available" @if ($product->status === 'not_available') selected @endif>Not Available</option>
                         </select>
                     </div>
-                    <div>
-                        <button type="submit" class="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700">Update Product</button>
+                    <div class="flex justify-end gap-2">
+                        <a href="{{ route('products.index') }}" class="bg-gray-300 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-400">
+                            Cancel
+                        </a>
+                        <button type="submit" class="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700">
+                            Update
+                        </button>
                     </div>
                 </form>
             </div>
