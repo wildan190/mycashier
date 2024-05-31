@@ -19,6 +19,9 @@
                     <x-nav-link href="{{ route('categories.index') }}" :active="request()->routeIs('categories.index')">
                         {{ __('Category') }}
                     </x-nav-link>
+                    <x-nav-link href="{{ route('products.index') }}" :active="request()->routeIs('products.index')">
+                        {{ __('Product') }}
+                    </x-nav-link>
                     @endif
                 </div>
             </div>
@@ -150,6 +153,9 @@
             @if (Auth::User()->hasRole('superadmin'))
             <x-responsive-nav-link href="{{ route('categories.index') }}" :active="request()->routeIs('categories.index')">
                 {{ __('Category') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link href="{{ route('products.index') }}" :active="request()->routeIs('products.index')">
+                {{ __('Product') }}
             </x-responsive-nav-link>
             @endif
         </div>
