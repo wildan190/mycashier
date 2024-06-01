@@ -5,9 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Transaction;
 use App\Models\Product;
-use Midtrans\Config;
-use Midtrans\Snap;
-use Midtrans\Notification;
 use PDF;
 
 class TransactionController extends Controller
@@ -58,28 +55,8 @@ class TransactionController extends Controller
         $transaction->total_price = $totalPrice;
         $transaction->save();
 
-        // Konfigurasi Midtrans
-        Config::$serverKey = config('midtrans.server_key');
-        // Set to Development/Sandbox Environment (default). Set to true for Production Environment (accept real transaction).
-        Config::$isProduction = config('midtrans.is_production');
-        // Set sanitization on (default)
-        Config::$isSanitized = config('midtrans.is_sanitized');
-        // Set 3DS transaction for credit card to true
-        Config::$is3ds = config('midtrans.is_3ds');
 
-        $params = [
-            'transaction_details' => [
-                'order_id' => $transaction->id,
-                'gross_amount' => $transaction->total_price,
-            ],
-        ];
-
-        // Buat token Snap menggunakan parameter yang telah dikonfigurasi
-        $snapToken = Snap::getSnapToken($params);
-
-        // Kembalikan respons dengan token Snap
-        return view('transactions.snap')->with('snapToken', $snapToken);
-
+        return redirect()->route('transactions.index')->with('success', 'Transaction created successfully.');
     }
 
     public function print(Transaction $transaction)

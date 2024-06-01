@@ -24,7 +24,7 @@ class ProductFactory extends Factory
         return [
             'product_name' => $this->faker->words(3, true),
             'category_id' => rand(1, 10), // Assuming categories exist in the database
-            'price' => $this->faker->numberBetween(10000, 10000000) / 100,
+            'price' => 80000,
             'product_stock' => $this->faker->numberBetween(0, 100),
             'status' => 'available',
         ];

@@ -18,11 +18,11 @@ class Product extends Model
     ];
 
     // Accessor to calculate price with 11% PPN
-    public function getPriceAttribute($value)
-    {
-        // Calculate price with 11% PPN
-        return $value * 1.11;
-    }
+    // public function getPriceAttribute($value)
+    // {
+    //     // Calculate price with 11% PPN
+    //     return $value * 1.11;
+    // }
 
     // Accessor to get readable status
     public function getStatusAttribute($value)

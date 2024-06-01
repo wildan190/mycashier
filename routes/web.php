@@ -39,4 +39,6 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
     Route::get('/transactions/create', [TransactionController::class, 'create'])->name('transactions.create');
     Route::post('/transactions', [TransactionController::class, 'store'])->name('transactions.store');
     Route::get('/transactions/{transaction}/print', [TransactionController::class, 'print'])->name('transactions.print');
+    // Route::post('/midtrans/callback', [TransactionController::class, 'midtransCallback']);
+
 });
