@@ -15,7 +15,7 @@
                     <h3 class="text-lg font-medium text-gray-900 dark:text-gray-200">
                         Categories List
                     </h3>
-                    <a href="{{ route('categories.create') }}" class="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700">
+                    <a href="{{ route('categories.create') }}" class="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition duration-300">
                         Create
                     </a>
                 </div>
@@ -48,10 +48,10 @@
                                     {{ $category->description }}
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-left text-sm font-medium">
-                                    <a href="{{ route('categories.show', $category->id) }}" class="text-indigo-600 dark:text-indigo-400 hover:text-indigo-900 dark:hover:text-indigo-300 mr-2">
+                                    <a href="{{ route('categories.show', $category->id) }}" class="text-indigo-600 dark:text-indigo-400 hover:text-indigo-900 dark:hover:text-indigo-300 mr-2 transition duration-300">
                                         Show
                                     </a>
-                                    <a href="{{ route('categories.edit', $category->id) }}" class="text-indigo-600 dark:text-indigo-400 hover:text-indigo-900 dark:hover:text-indigo-300">
+                                    <a href="{{ route('categories.edit', $category->id) }}" class="text-indigo-600 dark:text-indigo-400 hover:text-indigo-900 dark:hover:text-indigo-300 transition duration-300">
                                         Edit
                                     </a>
                                 </td>
@@ -64,3 +64,4 @@
         </div>
     </div>
 </x-app-layout>
+
