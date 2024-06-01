@@ -21,12 +21,12 @@
                             <th class="px-6 py-3 bg-gray-50 dark:bg-gray-900 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Total Price</th>
                         </tr>
                     </thead>
-                    <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                    <tbody class="bg-dark dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
                         @foreach ($transactions as $transaction)
                             <tr class="{{ $loop->even ? 'bg-gray-50' : 'bg-gray-100' }}">
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-200">{{ $transaction->transaction_number }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">{{ $transaction->transaction_date }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">{{ number_format($transaction->total_price, 2) }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-900">{{ $transaction->transaction_number }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-900">{{ $transaction->transaction_date }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-900">{{ number_format($transaction->total_price, 2) }}</td>
                             </tr>
                         @endforeach
                     </tbody>
@@ -35,4 +35,3 @@
         </div>
     </div>
 </x-app-layout>
-
