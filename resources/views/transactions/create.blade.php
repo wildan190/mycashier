@@ -1,4 +1,3 @@
-<!-- resources/views/transactions/create.blade.php -->
 <x-app-layout>
     <x-slot name="header">
         <div class="flex items-center justify-between">
@@ -11,34 +10,44 @@
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-xl sm:rounded-lg p-6">
-                <form action="{{ route('transactions.store') }}" method="POST" class="space-y-4">
-                    @csrf
-                    <div class="grid grid-cols-2 gap-4">
-                        <div>
-                            <label for="transaction_date" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Transaction Date:</label>
-                            <input type="date" name="transaction_date" id="transaction_date" class="mt-1 p-2 border rounded-md w-full dark:bg-gray-700 dark:text-gray-300" required value="<?php echo date('Y-m-d') ?>">
-                        </div>
-                        <div>
-                            <label for="customer" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Customer:</label>
-                            <input type="text" name="customer" id="customer" class="mt-1 p-2 border rounded-md w-full dark:bg-gray-700 dark:text-gray-300">
-                        </div>
-                    </div>
-                    <div id="products">
-                        <div class="mb-4" id="product-row-0">
-                            <label for="product_0" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Product:</label>
-                            <select name="products[0][id]" id="product_0" class="mt-1 p-2 border rounded-md w-full dark:bg-gray-700 dark:text-gray-300" required>
-                                <option value="" disabled selected>Select Product</option>
-                                @foreach ($products as $product)
-                                <option value="{{ $product->id }}">{{ $product->product_name }}</option>
-                                @endforeach
-                            </select>
-                            <label for="quantity_0" class="block mt-2 text-sm font-medium text-gray-700 dark:text-gray-300">Quantity:</label>
-                            <input type="number" name="products[0][quantity]" id="quantity_0" class="mt-1 p-2 border rounded-md w-full dark:bg-gray-700 dark:text-gray-300" required>
+                <div class="grid grid-cols-2 gap-4">
+                    <!-- Bagian Kiri: Grid Tile -->
+                    <div>
+                        <h3 class="text-lg font-medium text-gray-900 dark:text-gray-200 mb-4">Products</h3>
+                        <input type="text" id="search-product" class="mb-4 p-2 border rounded-md w-full dark:bg-gray-700 dark:text-gray-300" placeholder="Search Product...">
+                        <div id="product-grid" class="grid grid-cols-3 gap-4">
+                            @foreach ($products as $product)
+                            <div class="product-item border p-4 rounded-lg flex flex-col items-center" data-product-name="{{ strtolower($product->product_name) }}">
+                                <p class="text-gray-700 dark:text-gray-300">{{ $product->product_name }}</p>
+                                <button class="bg-indigo-600 text-white px-2 py-1 mt-2 rounded-md hover:bg-indigo-700 add-product-btn" data-product-id="{{ $product->id }}" data-product-name="{{ $product->product_name }}" data-product-price="{{ $product->price }}">Add</button>
+                            </div>
+                            @endforeach
                         </div>
                     </div>
-                    <button type="button" id="add-product" class="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700">Add Product</button>
-                    <button type="submit" class="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700">Create Transaction</button>
-                </form>
+                    
+                    <!-- Bagian Kanan: Daftar Produk yang Ditambahkan -->
+                    <div>
+                        <h3 class="text-lg font-medium text-gray-900 dark:text-gray-200 mb-4">Selected Products</h3>
+                        <form action="{{ route('transactions.store') }}" method="POST" class="space-y-4">
+                            @csrf
+                            <div>
+                                <label for="transaction_date" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Transaction Date:</label>
+                                <input type="date" name="transaction_date" id="transaction_date" class="mt-1 p-2 border rounded-md w-full dark:bg-gray-700 dark:text-gray-300" required value="<?php echo date('Y-m-d') ?>">
+                            </div>
+                            <div>
+                                <label for="customer" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Customer:</label>
+                                <input type="text" name="customer" id="customer" class="mt-1 p-2 border rounded-md w-full dark:bg-gray-700 dark:text-gray-300">
+                            </div>
+                            <div id="selected-products">
+                                <!-- Tempat untuk produk yang dipilih -->
+                            </div>
+                            <div id="total-price" class="text-lg font-medium text-gray-900 dark:text-gray-200 mt-4">
+                                Total Price: <span id="total-price-value">Rp0</span>
+                            </div>
+                            <button type="submit" class="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700">Create Transaction</button>
+                        </form>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -46,47 +55,74 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        let productId = 1;
-        const addProductButton = document.getElementById('add-product');
-        const productsContainer = document.getElementById('products');
+        const addProductButtons = document.querySelectorAll('.add-product-btn');
+        const selectedProductsContainer = document.getElementById('selected-products');
+        const totalPriceElement = document.getElementById('total-price-value');
+        const searchProductInput = document.getElementById('search-product');
+        const productItems = document.querySelectorAll('.product-item');
+        let totalPrice = 0;
 
-        addProductButton.addEventListener('click', function() {
-            const productRow = document.createElement('div');
-            productRow.classList.add('mb-4');
-            productRow.id = `product-row-${productId}`;
-
-            const productLabel = document.createElement('label');
-            productLabel.htmlFor = `product_${productId}`;
-            productLabel.classList.add('block', 'text-sm', 'font-medium', 'text-gray-700', 'dark:text-gray-300');
-            productLabel.textContent = 'Product:';
-            productRow.appendChild(productLabel);
-
-            const productSelect = document.createElement('select');
-            productSelect.name = `products[${productId}][id]`;
-            productSelect.id = `product_${productId}`;
-            productSelect.classList.add('mt-1', 'p-2', 'border', 'rounded-md', 'w-full', 'dark:bg-gray-700', 'dark:text-gray-300');
-            productSelect.required = true;
-            productSelect.innerHTML = document.getElementById('product_0').innerHTML;
-            productRow.appendChild(productSelect);
-
-            const quantityLabel = document.createElement('label');
-            quantityLabel.htmlFor = `quantity_${productId}`;
-            quantityLabel.classList.add('block', 'mt-2', 'text-sm', 'font-medium', 'text-gray-700', 'dark:text-gray-300');
-            quantityLabel.textContent = 'Quantity:';
-            productRow.appendChild(quantityLabel);
-
-            const quantityInput = document.createElement('input');
-            quantityInput.type = 'number';
-            quantityInput.name = `products[${productId}][quantity]`;
-            quantityInput.id = `quantity_${productId}`;
-            quantityInput.classList.add('mt-1', 'p-2', 'border', 'rounded-md', 'w-full', 'dark:bg-gray-700', 'dark:text-gray-300');
-            quantityInput.required = true;
-            productRow.appendChild(quantityInput);
-
-            productsContainer.appendChild(productRow);
-
-            productId++;
+        searchProductInput.addEventListener('input', function() {
+            const searchValue = this.value.toLowerCase();
+            productItems.forEach(item => {
+                const productName = item.getAttribute('data-product-name');
+                if (productName.includes(searchValue)) {
+                    item.style.display = 'flex';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
         });
+
+        addProductButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const productId = this.getAttribute('data-product-id');
+                const productName = this.getAttribute('data-product-name');
+                const productPrice = this.getAttribute('data-product-price');
+
+                const productRow = document.createElement('div');
+                productRow.classList.add('mb-4');
+                productRow.innerHTML = `
+                    <input type="hidden" name="products[${productId}][id]" value="${productId}">
+                    <p class="text-gray-700 dark:text-gray-300">${productName}</p>
+                    <label for="quantity_${productId}" class="block mt-2 text-sm font-medium text-gray-700 dark:text-gray-300">Quantity:</label>
+                    <input type="number" name="products[${productId}][quantity]" id="quantity_${productId}" class="mt-1 p-2 border rounded-md w-full dark:bg-gray-700 dark:text-gray-300 product-quantity" data-product-price="${productPrice}" required>
+                `;
+                selectedProductsContainer.appendChild(productRow);
+
+                const quantityInput = productRow.querySelector('.product-quantity');
+                quantityInput.addEventListener('input', function() {
+                    updateTotalPrice();
+                });
+            });
+        });
+
+        function updateTotalPrice() {
+            let total = 0;
+            const quantityInputs = document.querySelectorAll('.product-quantity');
+            quantityInputs.forEach(input => {
+                const productPrice = parseFloat(input.getAttribute('data-product-price'));
+                const quantity = parseInt(input.value);
+                if (!isNaN(quantity)) {
+                    total += productPrice * quantity;
+                }
+            });
+            totalPriceElement.textContent = formatRupiah(total);
+        }
+
+        function formatRupiah(angka, prefix = "Rp") {
+            var numberString = angka.toString().replace(/[^,\d]/g, ""),
+                split = numberString.split(","),
+                sisa = split[0].length % 3,
+                rupiah = split[0].substr(0, sisa),
+                ribuan = split[0].substr(sisa).match(/\d{3}/gi);
+
+            if (ribuan) {
+                const separator = sisa ? "." : "";
+                rupiah += separator + ribuan.join(".");
+            }
+
+            return prefix + (split[1] != undefined ? rupiah + "," + split[1] : rupiah);
+        }
     });
 </script>
-

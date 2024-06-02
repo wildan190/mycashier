@@ -22,6 +22,7 @@ class UserSeeder extends Seeder
             'password' => Hash::make('password'),
             'username' => $faker->username,
             'role' => 'superadmin',
+            'curent_team_id' => 1,
         ]);
     }
 }
