@@ -15,9 +15,14 @@
                     <h3 class="text-lg font-medium text-gray-900 dark:text-gray-200">
                         Products List
                     </h3>
-                    <a href="{{ route('products.create') }}" class="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700">
-                        Create
-                    </a>
+                    <div class="flex items-center gap-2">
+                        <div class="w-full max-w-xs">
+                            <input type="text" id="search" placeholder="Search..." value="{{ request('search') }}" class="block w-full px-4 py-2 text-gray-900 bg-gray-50 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" onkeyup="search()">
+                        </div>
+                        <a href="{{ route('products.create') }}" class="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700">
+                            Create
+                        </a>
+                    </div>
                 </div>
                 <div class="overflow-x-auto">
                     <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
@@ -41,7 +46,7 @@
                                 <th class="px-6 py-3 bg-gray-50 dark:bg-gray-900 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Action</th>
                             </tr>
                         </thead>
-                        <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                        <tbody id="tbody">
                             @foreach ($products as $product)
                             <tr>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-200">
@@ -76,4 +81,21 @@
         </div>
     </div>
 </x-app-layout>
+
+<script>
+    function search() {
+        const search = document.getElementById('search').value;
+        const tbody = document.getElementById('tbody');
+        const rows = tbody.getElementsByTagName('tr');
+        for (let i = 0; i < rows.length; i++) {
+            const row = rows[i];
+            const text = row.innerText.toLowerCase();
+            if (text.includes(search.toLowerCase())) {
+                row.style.display = 'table-row';
+            } else {
+                row.style.display = 'none';
+            }
+        }
+    }
+</script>
 

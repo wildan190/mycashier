@@ -12,16 +12,24 @@
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-xl sm:rounded-lg p-6">
                 <div class="grid grid-cols-2 gap-4">
                     <!-- Bagian Kiri: Grid Tile -->
-                    <div>
-                        <h3 class="text-lg font-medium text-gray-900 dark:text-gray-200 mb-4">Products</h3>
-                        <input type="text" id="search-product" class="mb-4 p-2 border rounded-md w-full dark:bg-gray-700 dark:text-gray-300" placeholder="Search Product...">
-                        <div id="product-grid" class="grid grid-cols-3 gap-4">
-                            @foreach ($products as $product)
-                            <div class="product-item border p-4 rounded-lg flex flex-col items-center" data-product-name="{{ strtolower($product->product_name) }}">
-                                <p class="text-gray-700 dark:text-gray-300">{{ $product->product_name }}</p>
-                                <button class="bg-indigo-600 text-white px-2 py-1 mt-2 rounded-md hover:bg-indigo-700 add-product-btn" data-product-id="{{ $product->id }}" data-product-name="{{ $product->product_name }}" data-product-price="{{ $product->price }}">Add</button>
+                    <div class="shadow-md rounded-lg">
+                        <div class="bg-white dark:bg-gray-800 p-6">
+                            <h3 class="text-lg font-medium text-gray-900 dark:text-gray-200 mb-4">Products</h3>
+                            <input type="text" id="search-product" class="mb-4 p-2 border rounded-md w-full dark:bg-gray-700 dark:text-gray-300" placeholder="Search Product...">
+                            <div id="product-grid" class="grid grid-cols-3 gap-4">
+                                @foreach ($products->take(12) as $product)
+                                <div class="product-item border p-4 rounded-lg flex flex-col items-center justify-between" data-product-name="{{ strtolower($product->product_name) }}">
+                                    <div class="flex items-center justify-center">
+                                        <img src="{{ $product->image_url ?? 'https://via.placeholder.com/150' }}" alt="{{ $product->product_name }}" class="w-24 h-24 object-cover mb-2">
+                                    </div>
+                                    <p class="text-gray-700 dark:text-gray-300 text-center">{{ $product->product_name }}</p>
+                                    <div class="flex items-center justify-center">
+                                        <button class="bg-indigo-600 text-white px-2 py-1 mt-2 rounded-md hover:bg-indigo-700 add-product-btn" data-product-id="{{ $product->id }}" data-product-name="{{ $product->product_name }}" data-product-price="{{ $product->price }}">Add</button>
+                                    </div>
+                                </div>
+                                @endforeach
                             </div>
-                            @endforeach
+                            {{ $products->links('pagination::tailwind') }}
                         </div>
                     </div>
                     

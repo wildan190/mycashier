@@ -16,8 +16,19 @@ class CategoryFactory extends Factory
      */
     public function definition()
     {
+        $categories = [
+            'Soft Drink',
+            'Water Bottle',
+            'Snack',
+            'Makanan',
+            'Hair Care',
+            'Body Care',
+            'Skin Care',
+            'Grooming Tools Wanita',
+            'Grooming Tools Pria',
+        ];
         return [
-            'name' => $this->faker->word,
+            'name' => $this->faker->randomElement($categories),
             'description' => $this->faker->sentence,
         ];
     }

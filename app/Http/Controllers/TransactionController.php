@@ -20,7 +20,7 @@ class TransactionController extends Controller
 
     public function create()
     {
-        $products = Product::where('product_stock', '>', 0)->get();
+        $products = Product::where('product_stock', '>', 0)->paginate(10);
         return view('transactions.create', compact('products'));
     }
 
@@ -69,7 +69,7 @@ class TransactionController extends Controller
 
         $params = [
             'transaction_details' => [
-                'order_id' => $transaction->id,
+                'order_id' => $transaction->id . "-" . date('Ymdhis'), // tambahkan tanggal dan waktu untuk memastikan order_id unik
                 'gross_amount' => $transaction->total_price,
             ],
         ];
