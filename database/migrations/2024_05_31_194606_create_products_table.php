@@ -20,6 +20,7 @@ class CreateProductsTable extends Migration
             $table->decimal('price', 10, 2); // Decimal type with 10 digits and 2 decimal places
             $table->integer('product_stock')->unsigned();
             $table->enum('status', ['available', 'not_available'])->default('available');
+            $table->string('picture')->nullable(); // Kolom picture ditambahkan di sini
             $table->timestamps();
 
             // Foreign key constraint

@@ -1,10 +1,12 @@
 <?php
+
 // app/Repositories/Eloquent/EloquentProductRepository.php
 
 namespace App\Repositories;
 
 use App\Models\Product;
 use App\Repositories\Interfaces\ProductRepositoryInterface;
+use Illuminate\Support\Facades\Storage;
 
 class ProductRepository implements ProductRepositoryInterface
 {
@@ -33,6 +35,12 @@ class ProductRepository implements ProductRepositoryInterface
     public function delete($id)
     {
         $product = $this->getById($id);
+
+        // Hapus gambar jika ada
+        if ($product->picture) {
+            Storage::disk('public')->delete($product->picture);
+        }
+
         $product->delete();
     }
 }

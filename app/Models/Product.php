@@ -15,6 +15,7 @@ class Product extends Model
         'price',
         'product_stock',
         'status',
+        'picture',
     ];
 
     // Accessor to calculate price with 11% PPN

@@ -10,17 +10,17 @@
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-xl sm:rounded-lg p-6">
-                <div class="grid grid-cols-2 gap-4">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
                     <!-- Bagian Kiri: Grid Tile -->
                     <div class="shadow-md rounded-lg">
                         <div class="bg-white dark:bg-gray-800 p-6">
                             <h3 class="text-lg font-medium text-gray-900 dark:text-gray-200 mb-4">Products</h3>
                             <input type="text" id="search-product" class="mb-4 p-2 border rounded-md w-full dark:bg-gray-700 dark:text-gray-300" placeholder="Search Product...">
-                            <div id="product-grid" class="grid grid-cols-3 gap-4">
+                            <div id="product-grid" class="grid grid-cols-2 sm:grid-cols-3 gap-4">
                                 @foreach ($products->take(12) as $product)
                                 <div class="product-item border p-4 rounded-lg flex flex-col items-center justify-between" data-product-name="{{ strtolower($product->product_name) }}">
                                     <div class="flex items-center justify-center">
-                                        <img src="{{ $product->image_url ?? 'https://via.placeholder.com/150' }}" alt="{{ $product->product_name }}" class="w-24 h-24 object-cover mb-2">
+                                        <img src="{{ asset('storage/' . $product->picture) }}" alt="{{ $product->product_name }}" class="w-24 h-24 object-cover mb-2">
                                     </div>
                                     <p class="text-gray-700 dark:text-gray-300 text-center">{{ $product->product_name }}</p>
                                     <div class="flex items-center justify-center">
@@ -40,7 +40,7 @@
                             @csrf
                             <div>
                                 <label for="transaction_date" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Transaction Date:</label>
-                                <input type="date" name="transaction_date" id="transaction_date" class="mt-1 p-2 border rounded-md w-full dark:bg-gray-700 dark:text-gray-300" required value="<?php echo date('Y-m-d') ?>">
+                                <input readonly type="date" name="transaction_date" id="transaction_date" class="mt-1 p-2 border rounded-md w-full dark:bg-gray-700 dark:text-gray-300" required value="<?php echo date('Y-m-d') ?>">
                             </div>
                             <div>
                                 <label for="customer" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Customer:</label>

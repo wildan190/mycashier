@@ -11,7 +11,7 @@
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-xl sm:rounded-lg p-6">
-                <form action="{{ route('products.update', $product->id) }}" method="POST">
+                <form action="{{ route('products.update', $product->id) }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
                     <div class="mb-4">
@@ -22,7 +22,7 @@
                         <label for="category_id" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Category:</label>
                         <select name="category_id" id="category_id" class="mt-1 p-2 border rounded-md w-full dark:bg-gray-700 dark:text-gray-300" required>
                             @foreach ($categories as $category)
-                            <option value="{{ $category->id }}" @if ($category->id === $product->category_id) selected @endif>{{ $category->name }}</option>
+                                <option value="{{ $category->id }}" @if ($category->id === $product->category_id) selected @endif>{{ $category->name }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -40,6 +40,15 @@
                             <option value="available" @if ($product->status === 'available') selected @endif>Available</option>
                             <option value="not_available" @if ($product->status === 'not_available') selected @endif>Not Available</option>
                         </select>
+                    </div>
+                    <div class="mb-4">
+                        <label for="picture" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Picture:</label>
+                        @if ($product->picture)
+                            <div class="mb-2">
+                                <img src="{{ asset('storage/' . $product->picture) }}" alt="Current Picture" class="max-w-xs h-auto">
+                            </div>
+                        @endif
+                        <input type="file" name="picture" id="picture" class="mt-1 p-2 border rounded-md w-full dark:bg-gray-700 dark:text-gray-300">
                     </div>
                     <div class="flex justify-end gap-2">
                         <a href="{{ route('products.index') }}" class="bg-gray-300 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-400">
