@@ -67,11 +67,23 @@ class TransactionController extends Controller
         // Set 3DS transaction for credit card to true
         Config::$is3ds = config('midtrans.is_3ds');
 
+        $items = [];
+        foreach ($request->products as $product) {
+            $productData = Product::find($product['id']);
+            $items[] = [
+                'id' => $productData->id,
+                'price' => $productData->price,
+                'quantity' => $product['quantity'],
+                'name' => $productData->product_name,
+            ];
+        }
+
         $params = [
             'transaction_details' => [
                 'order_id' => $transaction->id . "-" . date('Ymdhis'), // tambahkan tanggal dan waktu untuk memastikan order_id unik
                 'gross_amount' => $transaction->total_price,
             ],
+            'item_details' => $items,
         ];
 
         // Buat token Snap menggunakan parameter yang telah dikonfigurasi
@@ -89,3 +101,4 @@ class TransactionController extends Controller
         return $pdf->download('transaction_receipt.pdf');
     }
 }
+
