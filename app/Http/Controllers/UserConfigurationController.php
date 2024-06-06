@@ -2,26 +2,36 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\View;
 
 class UserConfigurationController extends Controller
 {
-    // Tampilkan halaman untuk mengubah peran pengguna
+    /**
+     * Display a listing of the resource.
+     */
     public function index()
     {
         $users = User::all();
-        return view('user_configuration.index', compact('users'));
+
+        return View::make('user_configuration.index', compact('users'));
     }
 
-    // Tampilkan halaman edit peran pengguna
+    /**
+     * Show the form for editing the specified resource.
+     */
     public function edit($id)
     {
         $user = User::findOrFail($id);
-        return view('user_configuration.edit', compact('user'));
+
+        return View::make('user_configuration.edit', compact('user'));
     }
 
-    // Perbarui peran pengguna
+    /**
+     * Update the specified resource in storage.
+     */
     public function update(Request $request, $id)
     {
         $request->validate([
@@ -32,6 +42,8 @@ class UserConfigurationController extends Controller
         $user->role = $request->role;
         $user->save();
 
-        return redirect()->route('user_configuration.index')->with('success', 'User role updated successfully.');
+        return Redirect::route('user_configuration.index')
+            ->with('success', 'User role updated successfully.');
     }
 }
+
