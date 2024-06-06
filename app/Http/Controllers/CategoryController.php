@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Repositories\Interfaces\CategoryRepositoryInterface;
+use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
@@ -34,7 +34,7 @@ class CategoryController extends Controller
     public function store(Request $request)
     {
         $data = $request->only(['name', 'description']);
-        $category = $this->categoryRepository->create($data);
+        $this->categoryRepository->create($data);
         return redirect()->route('categories.index');
     }
 
@@ -47,7 +47,7 @@ class CategoryController extends Controller
     public function update(Request $request, $id)
     {
         $data = $request->only(['name', 'description']);
-        $category = $this->categoryRepository->update($id, $data);
+        $this->categoryRepository->update($id, $data);
         return redirect()->route('categories.index');
     }
 
