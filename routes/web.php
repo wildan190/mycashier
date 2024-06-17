@@ -28,6 +28,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
 
     Route::get('/reports/monthly', [ReportController::class, 'monthlyReport'])->name('reports.monthly');
     Route::get('/reports/products', [ReportController::class, 'productReport'])->name('reports.products');
+
 });
 
 Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified', 'CheckRole:superadmin,admin'])->group(function () {
