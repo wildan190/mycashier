@@ -16,12 +16,25 @@ class UserSeeder extends Seeder
     {
         $faker = Factory::create();
 
+        // create user superadmin
+        User::create([
+            'name' => $faker->name,
+            'email' => 'superadmin@dev',
+            'password' => Hash::make('password'),
+            'username' => $faker->username,
+            'role' => 'superadmin',
+            'email_verified_at' => now(),
+            //'current_team_id' => 1,
+        ]);
+
+        // create user admin
         User::create([
             'name' => $faker->name,
             'email' => 'admin@dev',
             'password' => Hash::make('password'),
             'username' => $faker->username,
-            'role' => 'superadmin',
+            'role' => 'admin',
+            'email_verified_at' => now(),
             //'current_team_id' => 1,
         ]);
     }

@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\API;
 
-use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use App\Models\Transaction;
 use App\Models\Product;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Http\Request;
 
 class ReportController extends Controller
 {
@@ -23,7 +24,12 @@ class ReportController extends Controller
         // Hitung total penjualan bulanan
         $monthlySales = $transactions->sum('total_price');
 
-        return view('reports.monthly', compact('transactions', 'monthlySales', 'year', 'month'));
+        return response()->json([
+            'transactions' => $transactions,
+            'monthlySales' => $monthlySales,
+            'year' => $year,
+            'month' => $month
+        ]);
     }
 
     public function productReport(Request $request)
@@ -37,6 +43,10 @@ class ReportController extends Controller
         $remainingProducts = Product::select('product_name', 'product_stock')
             ->get();
 
-        return view('reports.products', compact('productSales', 'remainingProducts'));
+        return response()->json([
+            'productSales' => $productSales,
+            'remainingProducts' => $remainingProducts
+        ]);
     }
 }
+

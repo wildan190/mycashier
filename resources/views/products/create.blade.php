@@ -13,6 +13,15 @@
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-xl sm:rounded-lg p-6">
                 <form action="{{ route('products.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
+                    @if ($errors->any())
+                    <div class="text-red-600">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                    @endif
                     <div class="mb-4">
                         <label for="product_name" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Product Name:</label>
                         <input type="text" name="product_name" id="product_name" class="mt-1 p-2 border rounded-md w-full dark:bg-gray-700 dark:text-gray-300" placeholder="Enter product name" required autofocus>
@@ -22,7 +31,7 @@
                         <select name="category_id" id="category_id" class="mt-1 p-2 border rounded-md w-full dark:bg-gray-700 dark:text-gray-300" placeholder="Select category" required>
                             <option value="" disabled selected>Select Category</option>
                             @foreach ($categories as $category)
-                                <option value="{{ $category->id }}">{{ $category->name }}</option>
+                            <option value="{{ $category->id }}">{{ $category->name }}</option>
                             @endforeach
                         </select>
                     </div>

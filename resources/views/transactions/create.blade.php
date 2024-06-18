@@ -38,13 +38,28 @@
                         <h3 class="text-lg font-medium text-gray-900 dark:text-gray-200 mb-4">Selected Products</h3>
                         <form action="{{ route('transactions.store') }}" method="POST" class="space-y-4">
                             @csrf
+
+                            @if ($errors->any())
+                                <div class="text-red-600">
+                                    <ul>
+                                        @foreach ($errors->all() as $error)
+                                            <li>{{ $error }}</li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            @endif
                             <div>
                                 <label for="transaction_date" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Transaction Date:</label>
                                 <input readonly type="date" name="transaction_date" id="transaction_date" class="mt-1 p-2 border rounded-md w-full dark:bg-gray-700 dark:text-gray-300" required value="<?php echo date('Y-m-d') ?>">
                             </div>
                             <div>
-                                <label for="customer" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Customer:</label>
-                                <input type="text" name="customer" id="customer" class="mt-1 p-2 border rounded-md w-full dark:bg-gray-700 dark:text-gray-300">
+                                <label for="customers_id" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Customer:</label>
+                                <select name="customers_id" id="customers_id" class="mt-1 p-2 border rounded-md w-full dark:bg-gray-700 dark:text-gray-300" required>
+                                    <option value="">-- Select Customer --</option>
+                                    @foreach ($customers as $customer)
+                                    <option value="{{ $customer->id }}">{{ $customer->name }}</option>
+                                    @endforeach
+                                </select>
                             </div>
                             <div id="selected-products">
                                 <!-- Tempat untuk produk yang dipilih -->

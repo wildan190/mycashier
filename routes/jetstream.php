@@ -35,15 +35,15 @@ Route::group(['middleware' => config('jetstream.middleware', ['web'])], function
             }
 
             // Teams...
-            if (Jetstream::hasTeamFeatures()) {
-                Route::get('/teams/create', [TeamController::class, 'create'])->name('teams.create');
-                Route::get('/teams/{team}', [TeamController::class, 'show'])->name('teams.show');
-                Route::put('/current-team', [CurrentTeamController::class, 'update'])->name('current-team.update');
+            // if (Jetstream::hasTeamFeatures()) {
+            //     Route::get('/teams/create', [TeamController::class, 'create'])->name('teams.create');
+            //     Route::get('/teams/{team}', [TeamController::class, 'show'])->name('teams.show');
+            //     Route::put('/current-team', [CurrentTeamController::class, 'update'])->name('current-team.update');
 
-                Route::get('/team-invitations/{invitation}', [TeamInvitationController::class, 'accept'])
-                    ->middleware(['signed'])
-                    ->name('team-invitations.accept');
-            }
+            //     Route::get('/team-invitations/{invitation}', [TeamInvitationController::class, 'accept'])
+            //         ->middleware(['signed'])
+            //         ->name('team-invitations.accept');
+            // }
         });
     });
 });

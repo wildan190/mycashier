@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\API;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Transaction;
 use App\Models\Product;
@@ -47,6 +48,12 @@ class DashboardController extends Controller
         $categories = Category::withCount('products')
             ->get();
 
-        return view('dashboard', compact('salesData', 'productsSold', 'productsStock', 'categories'));
+        return response()->json([
+            'salesData' => $salesData,
+            'productsSold' => $productsSold,
+            'productsStock' => $productsStock,
+            'categories' => $categories,
+        ]);
     }
 }
+

@@ -10,6 +10,7 @@ class Transaction extends Model
     use HasFactory;
 
     protected $fillable = [
+        'customers_id',
         'transaction_number',
         'transaction_date',
         'transaction_year',
@@ -18,5 +19,10 @@ class Transaction extends Model
     public function products()
     {
         return $this->belongsToMany(Product::class)->withPivot('quantity');
+    }
+
+    public function customers()
+    {
+        return $this->belongsTo(Customer::class);
     }
 }

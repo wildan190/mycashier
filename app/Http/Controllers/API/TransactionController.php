@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\API;
 
+use App\Http\Controllers\Controller;
 use App\Models\Transaction;
 use App\Models\Product;
 use App\Models\Customer;
@@ -13,14 +14,17 @@ class TransactionController extends Controller
     public function index()
     {
         $transactions = Transaction::orderBy('created_at', 'desc')->paginate(10);
-        return view('transactions.index', compact('transactions'));
+        return $transactions;
     }
 
     public function create()
     {
         $customers = Customer::all();
         $products = Product::where('product_stock', '>', 0)->paginate(10);
-        return view('transactions.create', compact('products', 'customers'));
+        return [
+            'customers' => $customers,
+            'products' => $products,
+        ];
     }
 
     public function store(Request $request)
@@ -33,7 +37,7 @@ class TransactionController extends Controller
 
         $this->createTransactionItems($request, $transaction);
 
-        return redirect()->route('transactions.index');
+        return $transaction;
     }
 
     public function print(Transaction $transaction)
@@ -41,7 +45,7 @@ class TransactionController extends Controller
         $pdf = PDF::loadView('transactions.print', compact('transaction'))
             ->setPaper('a7', 'portrait');
 
-        return $pdf->download('transaction_receipt.pdf');
+        return response($pdf->download('transaction_receipt.pdf'));
     }
 
     private function validateTransaction(Request $request)
@@ -93,5 +97,5 @@ class TransactionController extends Controller
         $transaction->total_price = $totalPrice;
         $transaction->save();
     }
-    
+
 }

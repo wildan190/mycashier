@@ -1,4 +1,3 @@
-<!-- resources/views/categories/index.blade.php -->
 <x-app-layout>
     <x-slot name="header">
         <div class="flex items-center justify-between">
@@ -45,7 +44,7 @@
                                     {{ $category->name }}
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
-                                    {{ $category->description }}
+                                    {{ $category->description ?? 'N/A' }}
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-left text-sm font-medium">
                                     <a href="{{ route('categories.show', $category->id) }}" class="text-indigo-600 dark:text-indigo-400 hover:text-indigo-900 dark:hover:text-indigo-300 mr-2 transition duration-300">
@@ -64,4 +63,3 @@
         </div>
     </div>
 </x-app-layout>
-
